@@ -1,0 +1,18 @@
+/* Seletor para o Input de Pesquisa */
+.input-group input.form-control {
+    color: white !important; /* Garante que o texto digitado seja branco */
+}
+
+/* Força o placeholder a ter uma cor clara em todos os navegadores */
+.input-group input.form-control::placeholder {
+    color: rgba(255, 255, 255, 0.7) !important; /* Branco com opacidade para o placeholder */
+}
+
+/* Para compatibilidade com Chrome, Edge, Safari */
+.input-group input.form-control::-webkit-input-placeholder {
+    color: rgba(255, 255, 255, 0.7) !important;
+}
+/* Para Firefox */
+.input-group input.form-control:-moz-placeholder {
+    color: rgba(255, 255, 255, 0.7) !important;
+}

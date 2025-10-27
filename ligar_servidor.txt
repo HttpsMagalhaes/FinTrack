@@ -1,0 +1,4 @@
+python -m venv venv (criar o ambiente virtual)
+venv\Scripts\activate (ativar o ambiente virtual)
+pip install Django yfinance matplotlib pandas (instalar as bibliotecas)
+python manage.py runserver (rodar o servidor)

@@ -15,14 +15,13 @@ Including another URLconf
     2. Add a URL to urlpatterns:  path('blog/', include('blog.urls'))
 """
 
-
 from django.contrib import admin
 from django.urls import path
 # Importa a função diretamente do seu app para simplificar o teste
-from app.views import olamundo 
+from app.views import * 
 
 urlpatterns = [
     path('admin/', admin.site.urls),
     # A URL raiz (/) agora chama a função olamundo
-    path('', olamundo, name='home_teste'), 
+    path('', home, name='home'), 
 ]
