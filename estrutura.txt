@@ -1,0 +1,72 @@
+Listagem de caminhos de pasta
+O n�mero de s�rie do volume � 3450-414F
+C:.
+�   .gitattributes
+�   .gitignore
+�   db.sqlite3
+�   estrutura.txt
+�   ligar_servidor.txt
+�   manage.py
+�   README.md
+�   
++---app
+�   �   admin.py
+�   �   apps.py
+�   �   models.py
+�   �   tests.py
+�   �   views.py
+�   �   __init__.py
+�   �   
+�   +---migrations
+�   �   �   __init__.py
+�   �   �   
+�   �   +---__pycache__
+�   �           __init__.cpython-312.pyc
+�   �           __init__.cpython-313.pyc
+�   �           
+�   +---static
+�   �   �   style.css
+�   �   �   
+�   �   +---img
+�   �           fintrack.png
+�   �           
+�   +---templates
+�   �       comparacao.html
+�   �       contato.html
+�   �       detalhes.html
+�   �       favoritos.html
+�   �       home.html
+�   �       index.html
+�   �       nav.html
+�   �       perfil.html
+�   �       rentaveis.html
+�   �       
+�   +---__pycache__
+�           admin.cpython-312.pyc
+�           admin.cpython-313.pyc
+�           apps.cpython-312.pyc
+�           apps.cpython-313.pyc
+�           models.cpython-312.pyc
+�           models.cpython-313.pyc
+�           views.cpython-312.pyc
+�           views.cpython-313.pyc
+�           __init__.cpython-312.pyc
+�           __init__.cpython-313.pyc
+�           
++---config
+�   �   asgi.py
+�   �   settings.py
+�   �   urls.py
+�   �   wsgi.py
+�   �   __init__.py
+�   �   
+�   +---__pycache__
+�           settings.cpython-312.pyc
+�           settings.cpython-313.pyc
+�           urls.cpython-312.pyc
+�           urls.cpython-313.pyc
+�           wsgi.cpython-312.pyc
+�           wsgi.cpython-313.pyc
+�           __init__.cpython-312.pyc
+�           __init__.cpython-313.pyc
+�           

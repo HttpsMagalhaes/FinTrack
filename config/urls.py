@@ -16,12 +16,11 @@ Including another URLconf
 """
 
 from django.contrib import admin
-from django.urls import path
+from django.urls import path, include
 # Importa a função diretamente do seu app para simplificar o teste
 from app.views import * 
 
 urlpatterns = [
     path('admin/', admin.site.urls),
-    # A URL raiz (/) agora chama a função olamundo
-    path('', home, name='home'), 
+    path('', include('app.urls')),  # redireciona para as URLs da app
 ]

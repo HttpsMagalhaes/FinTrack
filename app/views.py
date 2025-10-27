@@ -1,10 +1,19 @@
-
 from django.shortcuts import render
 
 def home(request):
-    # Agora, em vez de texto, renderizamos o template
-    return render(request, 'index.html')
+    return render(request, 'index.html', {'template_name': 'home.html'})
 
-def pagina_contato(request):
-    # Simplesmente renderiza o template 'contato.html'
-    return render(request, 'contato.html')
+def comparacao(request):
+    return render(request, 'index.html', {'template_name': 'comparacao.html'})
+
+def favoritos(request):
+    return render(request, 'index.html', {'template_name': 'favoritos.html'})
+
+def contato(request):
+    return render(request, 'index.html', {'template_name': 'contato.html'})
+
+def perfil(request):
+    return render(request, 'index.html', {'template_name': 'perfil.html'})
+
+def rentaveis(request):
+    return render(request, 'index.html', {'template_name': 'rentaveis.html'})
