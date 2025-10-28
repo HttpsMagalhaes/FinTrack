@@ -75,10 +75,15 @@ WSGI_APPLICATION = 'config.wsgi.application'
 
 DATABASES = {
     'default': {
-        'ENGINE': 'django.db.backends.sqlite3',
-        'NAME': BASE_DIR / 'db.sqlite3',
+        'ENGINE': 'django.db.backends.postgresql',
+        'NAME': 'fintrack_db',     # nome do seu banco de dados
+        'USER': 'postgres',        # seu usuário do PostgreSQL
+        'PASSWORD': 'sua_senha_aqui',  # senha do seu PostgreSQL
+        'HOST': 'localhost',       # endereço do servidor (localhost se for local)
+        'PORT': '5432',            # porta padrão do PostgreSQL
     }
 }
+
 
 
 # Password validation
