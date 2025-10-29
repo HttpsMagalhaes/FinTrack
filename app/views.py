@@ -1,4 +1,6 @@
 from django.shortcuts import render
+from .models import Acao
+from .utils import get_stock_data
 
 def home(request):
     return render(request, 'index.html', {'template_name': 'home.html'})
@@ -17,3 +19,4 @@ def perfil(request):
 
 def rentaveis(request):
     return render(request, 'index.html', {'template_name': 'rentaveis.html'})
+

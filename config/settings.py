@@ -78,7 +78,7 @@ DATABASES = {
         'ENGINE': 'django.db.backends.postgresql',
         'NAME': 'fintrack_db',     # nome do seu banco de dados
         'USER': 'postgres',        # seu usuário do PostgreSQL
-        'PASSWORD': 'sua_senha_aqui',  # senha do seu PostgreSQL
+        'PASSWORD': '123456',  # senha do seu PostgreSQL
         'HOST': 'localhost',       # endereço do servidor (localhost se for local)
         'PORT': '5432',            # porta padrão do PostgreSQL
     }
