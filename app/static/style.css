@@ -1,18 +1,55 @@
 /* Seletor para o Input de Pesquisa */
 .input-group input.form-control {
-    color: white !important; /* Garante que o texto digitado seja branco */
+    color: white !important;
+    /* Garante que o texto digitado seja branco */
 }
 
 /* Força o placeholder a ter uma cor clara em todos os navegadores */
 .input-group input.form-control::placeholder {
-    color: rgba(255, 255, 255, 0.7) !important; /* Branco com opacidade para o placeholder */
+    color: rgba(255, 255, 255, 0.7) !important;
+    /* Branco com opacidade para o placeholder */
 }
 
 /* Para compatibilidade com Chrome, Edge, Safari */
 .input-group input.form-control::-webkit-input-placeholder {
     color: rgba(255, 255, 255, 0.7) !important;
 }
+
 /* Para Firefox */
 .input-group input.form-control:-moz-placeholder {
     color: rgba(255, 255, 255, 0.7) !important;
 }
+
+html, body {
+    margin: 0;
+    padding: 0;
+    width: 100%;
+    height: 100%;
+    overflow-x: hidden; /* remove rolagem horizontal */
+}
+
+section {
+    width: 100%;
+    height: 100vh;
+    overflow-y: auto; /* só rola verticalmente se precisar */
+    box-sizing: border-box;
+}
+
+/* Estilo da barra de rolagem */
+section::-webkit-scrollbar {
+    width: 10px;               /* largura da barra */
+}
+
+/* Fundo da barra */
+section::-webkit-scrollbar-track {
+    background: #1e1e1e;       /* cor do fundo da barra */
+    border-radius: 10px;
+}
+
+/* Parte que se move (thumb) */
+section::-webkit-scrollbar-thumb {
+    background-color: #2c3034; 
+    border-radius: 10px;
+    border: 2px solid #1e1e1e; /* borda do mesmo tom do fundo */
+}
+
