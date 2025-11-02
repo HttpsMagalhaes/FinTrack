@@ -17,6 +17,6 @@ def contato(request):
 def perfil(request):
     return render(request, 'index.html', {'template_name': 'perfil.html'})
 
-def rentaveis(request):
-    return render(request, 'index.html', {'template_name': 'rentaveis.html'})
+def lista_rentaveis(request):
+    return render(request, 'index.html', {'template_name': 'lista_rentaveis.html'})
 
