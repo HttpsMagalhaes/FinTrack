@@ -15,10 +15,10 @@ class Acao(models.Model):
     nome_empresa = models.CharField(max_length=100)
     setor = models.CharField(max_length=45)
     descricao = models.TextField()
+    variacao = models.FloatField(default=0.0)  # 🔹 novo campo
 
     def __str__(self):
         return f"{self.ticket} - {self.nome_empresa}"
-
 
 class AcaoFavoritada(models.Model):
     usuario = models.ForeignKey(Usuario, on_delete=models.CASCADE)

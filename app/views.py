@@ -28,7 +28,7 @@ def lista_rentaveis(request):
     for acao in acoes:
         try:
             ticker = yf.Ticker(acao.ticket)
-            info = ticker.history(period="7d")  # últimos dois dias
+            info = ticker.history(period="7d")  # última semana
             if len(info) >= 2:
                 preco_ontem = info['Close'][-7]
                 preco_semana = info['Close'][-1]
@@ -47,3 +47,23 @@ def lista_rentaveis(request):
         })
 
     return render(request, 'lista_rentaveis.html', {'acoes': dados_acoes})
+
+def top10_rentaveis(request):
+    from django.db.models import F, FloatField
+    from django.db.models.functions import Cast
+
+    # Filtra somente ações com variação numérica válida
+    acoes = (
+        Acao.objects
+        .exclude(variacao__isnull=True)  # remove null
+        .exclude(variacao='—')          # remove traço
+        .annotate(variacao_num=Cast('variacao', FloatField()))  # converte para número
+        .order_by('-variacao_num')[:10]  # ordena pelo valor numérico
+    )
+
+    context = {
+        'acoes': acoes,
+    }
+
+    return render(request, 'top10_rentaveis.html', context)
+
