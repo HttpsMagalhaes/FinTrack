@@ -1,0 +1,64 @@
+{% extends 'index.html' %}
+{% load humanize %}
+
+{% block content %}
+<section class="d-flex bg-dark m-4 rounded flex-column"
+    style="width: 94rem; height: 95vh; padding: 1rem; margin: 1.5rem;">
+    <div class="d-flex justify-content-between align-items-center mb-4">
+        <h2 class="text-white fw-bold">Meus Favoritos</h2>
+        <span class="badge bg-dark border border-secondary">{{ acoes|length }} Salvos</span>
+    </div>
+
+    <div class="card bg-dark border-secondary shadow-lg">
+        <div class="card-body p-0">
+            {% if acoes %}
+            <div class="table-responsive">
+                <table class="table table-dark table-hover mb-0 align-middle">
+                    <thead class="bg-secondary text-white small">
+                        <tr>
+                            <th class="ps-4">Ticker</th>
+                            <th>Empresa</th>
+                            <th>Setor</th>
+                            <th class="text-end">Variação</th>
+                            <th class="text-center">Excluir</th>
+                        </tr>
+                    </thead>
+                    <tbody class="border-top border-secondary">
+                        {% for acao in acoes %}
+                        <tr>
+                            <td class="ps-4">
+                                <a href="{% url 'detalhes_acao' acao.ticket %}"
+                                    class="text-white fw-bold text-decoration-none">
+                                    {{ acao.ticket }}
+                                </a>
+                            </td>
+                            <td class="text-white">{{ acao.nome_empresa }}</td>
+                            <td><span class="badge bg-secondary bg-opacity-50">{{ acao.setor }}</span></td>
+
+                            <td class="text-end {% if acao.variacao < 0 %}text-danger{% else %}text-success{% endif %}">
+                                {{ acao.variacao|floatformat:2 }}%
+                            </td>
+
+                            <td class="text-center">
+                                <a href="{% url 'favoritar_acao' acao.ticket %}?next=favoritos"
+                                    class="btn btn-sm btn-outline-danger" title="Remover dos Favoritos">
+                                    <i class="bi bi-trash"></i>
+                                </a>
+                            </td>
+                        </tr>
+                        {% endfor %}
+                    </tbody>
+                </table>
+            </div>
+            {% else %}
+            <div class="p-5 text-center">
+                <i class="bi bi-heart text-secondary display-1 mb-3"></i>
+                <h3 class="text-muted">Você ainda não tem favoritos.</h3>
+                <p class="text-muted">Busque uma ação e clique no coração para salvar aqui.</p>
+                <a href="{% url 'home' %}" class="btn btn-primary mt-2">Buscar Ações</a>
+            </div>
+            {% endif %}
+        </div>
+    </div>
+</section>
+{% endblock %}

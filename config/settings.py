@@ -76,7 +76,7 @@ WSGI_APPLICATION = 'config.wsgi.application'
 
 DATABASES = {
     'default': {
-        'ENGINE': 'django.db.backends.postgresql',
+        'ENGINE': 'django.db.backends.sqlite3',
         'NAME': 'fintrack_db',     # nome do seu banco de dados
         'USER': 'postgres',        # seu usuário do PostgreSQL
         'PASSWORD': '123456',  # senha do seu PostgreSQL
