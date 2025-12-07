@@ -171,6 +171,89 @@ def detalhes_acao(request, ticket):
     }
     return render(request, 'detalhes_acao.html', context)
 
+def comparacao(request):
+    todas_acoes = Acao.objects.exclude(ticket='').order_by('ticket')
+    
+    t1 = request.GET.get('ticket1')
+    t2 = request.GET.get('ticket2')
+    
+    dados_comp = None
+    labels = []
+    data1 = []
+    data2 = []
+    
+    if t1 and t2:
+        sym1 = f"{t1.upper().replace('.SA', '')}.SA"
+        sym2 = f"{t2.upper().replace('.SA', '')}.SA"
+        
+        try:
+            # Busca dados
+            y1 = yf.Ticker(sym1)
+            y2 = yf.Ticker(sym2)
+            
+            # Histórico
+            h1 = y1.history(period="1mo")
+            h2 = y2.history(period="1mo")
+            
+            # Infos
+            i1 = y1.info
+            i2 = y2.info
+            
+            dados_comp = {
+                'acao1': {
+                    'ticket': t1.upper(),
+                    'nome': i1.get('longName', t1),
+                    'preco': i1.get('currentPrice') or i1.get('regularMarketPrice'),
+                    'dy': i1.get('dividendYield', 0),
+                    'pl': i1.get('trailingPE'),
+                    'vp': i1.get('priceToBook'),
+                },
+                'acao2': {
+                    'ticket': t2.upper(),
+                    'nome': i2.get('longName', t2),
+                    'preco': i2.get('currentPrice') or i2.get('regularMarketPrice'),
+                    'dy': i2.get('dividendYield', 0),
+                    'pl': i2.get('trailingPE'),
+                    'vp': i2.get('priceToBook'),
+                }
+            }
+            
+            # --- CORREÇÃO DA LÓGICA DO GRÁFICO ---
+            # Cria um dicionário auxiliar para a Ação 2: {'2023-12-06': 15.40, ...}
+            # Isso facilita achar o preço pela data em texto, evitando erros de hora/minuto
+            h2_dict = {data.strftime('%Y-%m-%d'): valor for data, valor in zip(h2.index, h2['Close'])}
+
+            for data, linha in h1.iterrows():
+                # Formata a data da Ação 1 para buscar na Ação 2
+                data_str_lookup = data.strftime('%Y-%m-%d')
+                data_fmt_label = data.strftime('%d/%m')
+                
+                labels.append(data_fmt_label)
+                data1.append(round(linha['Close'], 2))
+                
+                # Busca no dicionário da Ação 2
+                valor2 = h2_dict.get(data_str_lookup) 
+                
+                if valor2:
+                    data2.append(round(valor2, 2))
+                else:
+                    data2.append(None) # Se não tiver pregão nesse dia para a ação 2
+
+        except Exception as e:
+            print(f"Erro na comparação: {e}")
+    
+    context = {
+        'todas_acoes': todas_acoes,
+        'dados_comp': dados_comp,
+        'labels': json.dumps(labels),
+        'data1': json.dumps(data1),
+        'data2': json.dumps(data2),
+        't1_select': t1,
+        't2_select': t2
+    }
+    
+    return render(request, 'comparacao.html', context)
+
 def cadastro(request):
     if request.method == 'POST':
         form = UserCreationForm(request.POST)

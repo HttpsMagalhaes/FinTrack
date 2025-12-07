@@ -9,110 +9,113 @@
     }
 </style>
 
-<div class="container mt-4">
-    <div class="row">
-        <div class="col-12 mb-4 text-white">
-            <div class="d-flex justify-content-between align-items-center">
-                <div class="d-flex align-items-center gap-3">
-                    <div>
-                        <h2 class="fw-bold mb-0">{{ acao.ticket }} - {{ acao.nome_empresa }}</h2>
-                        <span class="badge bg-primary mt-2">{{ acao.setor }}</span>
+<section class="d-flex bg-dark m-4 rounded flex-column"
+    style="width: 94rem; height: 95vh; padding: 1rem; margin: 1.5rem;">
+    <div class="container mt-4">
+        <div class="row">
+            <div class="col-12 mb-4 text-white">
+                <div class="d-flex justify-content-between align-items-center">
+                    <div class="d-flex align-items-center gap-3">
+                        <div>
+                            <h2 class="fw-bold mb-0">{{ acao.ticket }} - {{ acao.nome_empresa }}</h2>
+                            <span class="badge bg-primary mt-2">{{ acao.setor }}</span>
+                        </div>
+
+                    </div>
+
+                    <a href="{% url 'lista_rentaveis' %}" class="btn btn-outline-light">
+                        &larr; Voltar para Lista
+                    </a>
+                </div>
+                <hr class="text-secondary">
+            </div>
+
+            <div class="col-md-8">
+                <div class="card card-dark mb-4">
+                    <div class="card-header border-secondary d-flex justify-content-between align-items-center"
+                        style="min-height: 50px;">
+                        <span class="fw-bold">Histórico de Preços (Último Mês)</span>
+
+                        {% if user.is_authenticated %}
+                        <div class="d-flex align-items-center">
+                            <span class="me-2 text-white-50 small text-uppercase"
+                                style="font-size: 0.75rem;">Favoritar</span>
+
+                            <a href="{% url 'favoritar_acao' acao.ticket %}"
+                                class="btn btn-sm btn-outline-danger rounded-circle d-flex align-items-center justify-content-center"
+                                style="width: 30px; height: 30px; padding: 0;" title="Favoritar/Desfavoritar">
+
+                                {% if ja_favoritou %}
+                                <i class="bi bi-heart-fill" style="font-size: 0.9rem;"></i>
+                                {% else %}
+                                <i class="bi bi-heart" style="font-size: 0.9rem;"></i>
+                                {% endif %}
+                            </a>
+                        </div>
+                        {% endif %}
+                    </div>
+                    <div class="card-body">
+                        <canvas id="priceChart"></canvas>
                     </div>
 
                 </div>
-
-                <a href="{% url 'lista_rentaveis' %}" class="btn btn-outline-light">
-                    &larr; Voltar para Lista
-                </a>
             </div>
-            <hr class="text-secondary">
-        </div>
 
-        <div class="col-md-8">
-            <div class="card card-dark mb-4">
-                <div class="card-header border-secondary d-flex justify-content-between align-items-center"
-                    style="min-height: 50px;">
-                    <span class="fw-bold">Histórico de Preços (Último Mês)</span>
+            <div class="col-md-4">
 
-                    {% if user.is_authenticated %}
-                    <div class="d-flex align-items-center">
-                        <span class="me-2 text-white-50 small text-uppercase"
-                            style="font-size: 0.75rem;">Favoritar</span>
-
-                        <a href="{% url 'favoritar_acao' acao.ticket %}"
-                            class="btn btn-sm btn-outline-danger rounded-circle d-flex align-items-center justify-content-center"
-                            style="width: 30px; height: 30px; padding: 0;" title="Favoritar/Desfavoritar">
-
-                            {% if ja_favoritou %}
-                            <i class="bi bi-heart-fill" style="font-size: 0.9rem;"></i>
-                            {% else %}
-                            <i class="bi bi-heart" style="font-size: 0.9rem;"></i>
-                            {% endif %}
-                        </a>
+                <div class="card card-dark mb-3 text-center border-primary">
+                    <div class="card-header border-secondary text-uppercase text-white-50 small">
+                        Cotação Atual
                     </div>
-                    {% endif %}
-                </div>
-                <div class="card-body">
-                    <canvas id="priceChart"></canvas>
+                    <div class="card-body">
+                        <h1 class="display-4 fw-bold text-success">
+                            R$ {{ info_detalhada.preco_atual|floatformat:2|default:"--" }}
+                        </h1>
+                    </div>
                 </div>
 
-            </div>
-        </div>
-
-        <div class="col-md-4">
-
-            <div class="card card-dark mb-3 text-center border-primary">
-                <div class="card-header border-secondary text-uppercase text-white-50 small">
-                    Cotação Atual
+                <div class="card card-dark mb-3">
+                    <div class="card-header border-secondary text-white fw-bold">Indicadores Fundamentalistas</div>
+                    <ul class="list-group list-group-flush">
+                        <li class="list-group-item card-dark d-flex justify-content-between">
+                            <span>Dividend Yield (DY)</span>
+                            <span class="fw-bold text-info">
+                                {% widthratio info_detalhada.dividend_yield 1 100 %}%
+                            </span>
+                        </li>
+                        <li class="list-group-item card-dark d-flex justify-content-between">
+                            <span>P/L (Preço/Lucro)</span>
+                            <span class="fw-bold text-warning">
+                                {{ info_detalhada.pl|floatformat:2|default:"N/A" }}
+                            </span>
+                        </li>
+                    </ul>
                 </div>
-                <div class="card-body">
-                    <h1 class="display-4 fw-bold text-success">
-                        R$ {{ info_detalhada.preco_atual|floatformat:2|default:"--" }}
-                    </h1>
-                </div>
-            </div>
 
-            <div class="card card-dark mb-3">
-                <div class="card-header border-secondary text-white fw-bold">Indicadores Fundamentalistas</div>
-                <ul class="list-group list-group-flush">
-                    <li class="list-group-item card-dark d-flex justify-content-between">
-                        <span>Dividend Yield (DY)</span>
-                        <span class="fw-bold text-info">
-                            {% widthratio info_detalhada.dividend_yield 1 100 %}%
-                        </span>
+                <ul class="list-group">
+                    <li class="list-group-item card-dark d-flex justify-content-between align-items-center">
+                        <span>Máxima (52 sem)</span>
+                        <span class="fw-bold text-success">R$ {{ info_detalhada.max_ano|floatformat:2 }}</span>
                     </li>
-                    <li class="list-group-item card-dark d-flex justify-content-between">
-                        <span>P/L (Preço/Lucro)</span>
-                        <span class="fw-bold text-warning">
-                            {{ info_detalhada.pl|floatformat:2|default:"N/A" }}
+                    <li class="list-group-item card-dark d-flex justify-content-between align-items-center">
+                        <span>Mínima (52 sem)</span>
+                        <span class="fw-bold text-danger">R$ {{ info_detalhada.min_ano|floatformat:2 }}</span>
+                    </li>
+                    <li class="list-group-item card-dark d-flex justify-content-between align-items-center">
+                        <span>Valor de Mercado</span>
+                        <small class="text-white-50">R$ {{ info_detalhada.valor_mercado|filesizeformat }}</small>
+                    </li>
+                    <li class="list-group-item card-dark d-flex justify-content-between align-items-center">
+                        <span>Variação (Base Dados)</span>
+                        <span class="badge {% if acao.variacao > 0 %}bg-success{% else %}bg-danger{% endif %}">
+                            {{ acao.variacao|floatformat:2 }}%
                         </span>
                     </li>
                 </ul>
             </div>
-
-            <ul class="list-group">
-                <li class="list-group-item card-dark d-flex justify-content-between align-items-center">
-                    <span>Máxima (52 sem)</span>
-                    <span class="fw-bold text-success">R$ {{ info_detalhada.max_ano|floatformat:2 }}</span>
-                </li>
-                <li class="list-group-item card-dark d-flex justify-content-between align-items-center">
-                    <span>Mínima (52 sem)</span>
-                    <span class="fw-bold text-danger">R$ {{ info_detalhada.min_ano|floatformat:2 }}</span>
-                </li>
-                <li class="list-group-item card-dark d-flex justify-content-between align-items-center">
-                    <span>Valor de Mercado</span>
-                    <small class="text-white-50">R$ {{ info_detalhada.valor_mercado|filesizeformat }}</small>
-                </li>
-                <li class="list-group-item card-dark d-flex justify-content-between align-items-center">
-                    <span>Variação (Base Dados)</span>
-                    <span class="badge {% if acao.variacao > 0 %}bg-success{% else %}bg-danger{% endif %}">
-                        {{ acao.variacao|floatformat:2 }}%
-                    </span>
-                </li>
-            </ul>
         </div>
     </div>
-</div>
+</section>
 
 <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
 <script>

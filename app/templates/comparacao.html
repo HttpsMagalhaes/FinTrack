@@ -1,0 +1,153 @@
+{% extends 'index.html' %}
+{% load humanize %}
+
+{% block content %}
+<section class="d-flex bg-dark m-4 rounded flex-column" style="width: 94rem; height: 95vh; padding: 1rem; margin: 1.5rem; overflow-y: auto;">
+    
+    <div class="container-fluid">
+
+        <div class="row mb-4">
+            <div class="col-12 text-center text-white mb-3">
+                <h2 class="fw-bold">Comparador de Ativos</h2>
+            </div>
+
+            <div class="col-md-10 mx-auto">
+                <div class="card bg-dark border-secondary shadow">
+                    <div class="card-body py-3">
+                        <form method="GET" action="{% url 'comparacao' %}" class="row g-3 align-items-end justify-content-center">
+                            
+                            <div class="col-md-4">
+                                <label class="text-primary small mb-1 fw-bold">Ativo 1 (Azul)</label>
+                                <select name="ticket1" class="form-select form-select-sm bg-dark text-white border-secondary" required>
+                                    <option value="" disabled selected>Selecione...</option>
+                                    {% for a in todas_acoes %}
+                                        <option value="{{ a.ticket }}" {% if t1_select == a.ticket %}selected{% endif %}>
+                                            {{ a.ticket }} - {{ a.nome_empresa }}
+                                        </option>
+                                    {% endfor %}
+                                </select>
+                            </div>
+
+                            <div class="col-md-1 text-center text-white fw-bold align-self-center pt-3">
+                                VS
+                            </div>
+
+                            <div class="col-md-4">
+                                <label class="text-danger small mb-1 fw-bold">Ativo 2 (Vermelho)</label>
+                                <select name="ticket2" class="form-select form-select-sm bg-dark text-white border-secondary" required>
+                                    <option value="" disabled selected>Selecione...</option>
+                                    {% for a in todas_acoes %}
+                                        <option value="{{ a.ticket }}" {% if t2_select == a.ticket %}selected{% endif %}>
+                                            {{ a.ticket }} - {{ a.nome_empresa }}
+                                        </option>
+                                    {% endfor %}
+                                </select>
+                            </div>
+
+                            <div class="col-md-2">
+                                <button type="submit" class="btn btn-sm btn-success w-100 fw-bold">COMPARAR</button>
+                            </div>
+                        </form>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        {% if dados_comp %}
+        <div class="row">
+            
+            <div class="col-12 mb-3">
+                <div class="card bg-dark border-secondary" style="height: 40vh;">
+                    <div class="card-body">
+                        <canvas id="compChart"></canvas>
+                    </div>
+                </div>
+            </div>
+
+            <div class="col-12">
+                <div class="table-responsive">
+                    <table class="table table-dark table-bordered table-sm mb-0 text-center align-middle">
+                        <thead class="bg-secondary text-uppercase small">
+                            <tr>
+                                <th width="20%">Indicador</th>
+                                <th width="40%" class="text-primary">{{ dados_comp.acao1.ticket }}</th>
+                                <th width="40%" class="text-danger">{{ dados_comp.acao2.ticket }}</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <tr>
+                                <td class="fw-bold text-white">Preço Atual</td>
+                                <td class="fs-6 fw-bold">R$ {{ dados_comp.acao1.preco|floatformat:2 }}</td>
+                                <td class="fs-6 fw-bold">R$ {{ dados_comp.acao2.preco|floatformat:2 }}</td>
+                            </tr>
+                            <tr>
+                                <td class="fw-bold text-white">Dividend Yield</td>
+                                <td class="text-success fw-bold">{% widthratio dados_comp.acao1.dy 1 100 %}%</td>
+                                <td class="text-success fw-bold">{% widthratio dados_comp.acao2.dy 1 100 %}%</td>
+                            </tr>
+                            <tr>
+                                <td class="fw-bold text-white">P/L</td>
+                                <td>{{ dados_comp.acao1.pl|floatformat:2|default:"-" }}</td>
+                                <td>{{ dados_comp.acao2.pl|floatformat:2|default:"-" }}</td>
+                            </tr>
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+        </div>
+        {% endif %}
+
+    </div>
+</section>
+
+{% if dados_comp %}
+<script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+<script>
+    const ctx = document.getElementById('compChart').getContext('2d');
+    Chart.defaults.color = '#ADB5BD';
+    Chart.defaults.borderColor = '#495057';
+
+    new Chart(ctx, {
+        type: 'line',
+        data: {
+            labels: JSON.parse('{{ labels|safe }}'),
+            datasets: [
+                {
+                    label: '{{ dados_comp.acao1.ticket }}',
+                    data: JSON.parse('{{ data1|safe }}'),
+                    borderColor: '#0d6efd',
+                    backgroundColor: 'rgba(13, 202, 240, 0.1)',
+                    borderWidth: 2,
+                    tension: 0.3,
+                    pointRadius: 0
+                },
+                {
+                    label: '{{ dados_comp.acao2.ticket }}',
+                    data: JSON.parse('{{ data2|safe }}'),
+                    borderColor: '#dc3545',
+                    backgroundColor: 'rgba(220, 53, 69, 0.1)',
+                    borderWidth: 2,
+                    tension: 0.3,
+                    pointRadius: 0
+                }
+            ]
+        },
+        options: {
+            responsive: true,
+            maintainAspectRatio: false, // Importante para caber na div
+            interaction: {
+                mode: 'index',
+                intersect: false,
+            },
+            plugins: {
+                legend: { position: 'top' }
+            },
+            scales: {
+                y: { beginAtZero: false }
+            }
+        }
+    });
+</script>
+{% endif %}
+
+{% endblock %}
